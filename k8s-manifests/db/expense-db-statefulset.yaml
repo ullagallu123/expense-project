@@ -63,11 +63,3 @@ spec:
         - name: initdb
           configMap:
             name: expense-db-initialization-script
-  volumeClaimTemplates:
-  - metadata:
-      name: mysql-persistent-storage
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 1Gi
