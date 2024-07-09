@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: expense-backend
-          image: backend:1.0
+          image: siva9666/backend:1.0
           env:
             - name: DB_HOST
               valueFrom:
