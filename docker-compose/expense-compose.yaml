@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: expense-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ExpenseApp@1
+      MYSQL_USER: expense
+      MYSQL_DATABASE: transactions
+      MYSQL_PASSWORD: ExpenseApp@1
+    networks:
+      - expense
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "expense", "--password=ExpenseApp@1"]
+      interval: 10s
+      retries: 5
+
+  backend:
+    image: backend:1.0
+    container_name: expense-backend
+    environment:
+      - DB_HOST=expense-mysql
+    networks:
+      - expense
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      retries: 5
+
+  frontend:
+    image: frontend:1.0
+    container_name: expense-frontend
+    ports:
+      - "80:80"
+    networks:
+      - expense
+    depends_on:
+      backend:
+        condition: service_healthy
+
+networks:
+  expense:
+    driver: bridge
+
+volumes:
+  mysql_data:
