@@ -15,7 +15,7 @@ services:
       - mysql_data:/var/lib/mysql
       - ./scripts:/docker-entrypoint-initdb.d
   backend:
-    image: backend:1.0
+    image: siva9666/backend:1.0
     container_name: expense-backend
     environment:
       - DB_HOST=expense-mysql
@@ -24,7 +24,7 @@ services:
     depends_on:
       - db
   frontend:
-    image: frontend:1.0
+    image: siva9666/frontend:1.0
     container_name: expense-frontend
     ports:
       - "80:80"
